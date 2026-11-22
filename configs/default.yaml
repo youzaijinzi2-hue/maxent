@@ -1,0 +1,154 @@
+seed: 0
+
+dataset:
+  file_name: "data/raw/Se_Se0_rt_02.xdi"
+prepare:
+  w_lo: -20
+  w_hi: 40
+  beta: 50.0
+  Nn: 4096   # Matsubara cutoff; larger Nn improves tau-fit consistency.
+  sigma_iw: 0.05
+  sigma_iw_guard:         # Safety guard against over-large sigma_iw.
+    enabled: true         # true: clip sigma_iw by relative cap.
+    max_rel: 0.05        # cap(n)=max_rel*max(|G(iw_n)|, amp_floor).
+    cap_quantile: 0.90    # scalar sigma_iw uses quantile(cap(n)) as cap.
+    amp_floor_rel: 0.001  # amp_floor=amp_floor_rel*median(|G(iw>0)|).
+    sigma_min: 1e-12      # numerical lower bound after clipping.
+  add_iw_noise: true    # iωでノイズを注入し、そのままτへ変換して観測を作る
+  iw_noise_scale: 1.0   # 注入ノイズの全体倍率
+  use_tau_covariance: true  # 尤度でτ共分散の非対角まで使う
+  tau_cov_jitter: 1e-12     # τ共分散に足す対角ジッタ
+  snr: 20.0              # ← fallback用。sigma_iw指定時は使われない
+  calc_sigma_tau: True
+  sigma_tau: 0.1    # calc_sigma_tau=Falseの時に使う値
+  # sigma_iw_mode: rms   # rms or max   # ← fallback用
+  noise_peak:
+    use_noise_peak: False
+    mu: 0.0
+    sigma: 0.20
+    amp: 0.2
+    eps: 5e-3   # noiseを混ぜる割合
+  renorm: False
+
+grid:
+  N: 300   # omega grid
+  N_tau: 256
+
+default_model:
+  base: Dw
+  renormalize: true
+  floor: 1e-12
+
+  # base options:
+  #   - Dw
+  #   - flat
+  #   - gaussian
+  #   - gaussian_mixture
+  #
+  # Example (single gaussian):
+  # base: gaussian
+  # similar_to_Dw.enabled: false
+  # gaussian:
+  #   mu: 0.0
+  #   sigma: 2.0
+  #   amp: 1.0
+  #
+  # Example (gaussian mixture):
+  # base: gaussian_mixture
+  # similar_to_Dw.enabled: false
+  # gaussian_mixture:
+  #   components:
+  #     - {mu: -1.0, sigma: 1.0, weight: 0.6}
+  #     - {mu:  2.0, sigma: 1.8, weight: 0.4}
+  # Build a model close to D_w but not exactly identical.
+  similar_to_Dw:
+    enabled: false
+    smooth_sigma: 0.35   # in omega unit
+    mix_smoothed: 0.50   # 0: identical to D_w, 1: fully smoothed
+    min_rel_l2: 0.02     # force "not identical"
+    max_rel_l2: 0.15     # keep sufficiently close
+
+alphas:
+  kind: logspace
+  start_exp: -3          # 10^start_exp
+  end_exp: 1             # 10^end_exp
+  num: 10
+
+alpha_posterior:
+  method: bryan_laplace         # auto / bryan_laplace / ti
+  prior_bryan: jeffreys    # flat / jeffreys
+  prior_ti: jeffreys       # flat / jeffreys
+  bryan_main_term: map          # mean / map
+  reference_spectrum: map_local_mc          # mean / map / map_local_mc
+  map_local_samples: 64            # used when reference_spectrum=map_local_mc
+  map_local_logp_window: 5.0       # keep samples with logp >= logp_map - window
+  map_local_temperature: 1.0       # softmax temperature within local window
+  map_local_seed: 0
+
+output:
+  root: "runs"
+  tag: "debug"
+  save_float: "float64"
+
+sampler:
+  mode: mixed   # mixed / mh (simple fixed-step isotropic random-walk MH)
+  n_step: 2000
+  burnin_ratio: 0.5
+  hot_start_ratio: 0.10   # adaptation hot-phase length as a fraction of burn-in
+  adapt_end_ratio: 1.0    # compatibility knob (adaptation now always ends at burn-in)
+  adapt_hot_interval: 1   # scale adaptation cadence in hot phase
+  adapt_late_interval: 1  # scale/prob adaptation cadence in late phase
+  step_size_mh: 0.05
+  step_size_pca: 0.05
+  step_size_ws: 0.05
+  step_size_cg: 0.05
+  scale_adapt_t0: 10.0
+  scale_adapt_gamma: 0.05
+  scale_adapt_kappa: 0.75
+  scale_min: 1e-3
+  scale_max: 1e1
+  accept_ema_kappa: 0.80
+  prob_adapt_kappa: 0.55
+  prob_adapt_metric: esjd_per_sec   # esjd_per_sec / accept_rate
+  prob_min: 0.05
+  prob_utility_floor: 1e-12
+  prob_min_trials_per_move: 10
+  prob_esjd_whitened: true
+  prob_whiten_jitter: 1e-6
+  prob_whiten_shrinkage: 0.05
+  prob_whiten_weight_mode: count    # equal / count / trial
+  prob_swap_reward_weight: 0.15
+  prob_swap_warmup_updates: 10
+  cg_cov_blend: 0.20
+  cg_cov_jitter: 1e-6
+  swap_freq: 1
+  # use_replica_exchange: false   # optional; mh では未指定時に false
+  target_accept_pca: 0.40
+  target_accept_ws: 0.50
+  target_accept_cg: 0.57
+  compile: false
+  compile_backend: eager   # 例: eager / inductor など（環境依存）
+
+diagnostics:
+  do_iw: true
+  do_forward_self_test: true
+  rhat_split_segments: 4
+  rhat_exclude_edge_bins: 1
+  mcmc_plot:
+    enabled: true
+    out: mcmc_convergence.png
+    rhat_threshold: 1.05
+    ess_min_per_chain: 50
+    max_replicas: 12
+    dpi: 180
+
+plotting:
+  roi: [-5, 5]
+  peak_pos_samples: 5000
+  peak_pos_seed: 0
+  xlim: [-10, 20]
+  peak_bins: 25
+  normalize_mode: max
+
+logging:
+  level: INFO   # DEBUG / INFO / WARNING / ERROR

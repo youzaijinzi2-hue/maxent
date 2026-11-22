@@ -1,0 +1,19 @@
+$ C:\Users\knkyy\AppData\Local\Programs\Python\Python311\python.exe C:\Users\knkyy\MaxEntropyMethod\scripts\plot_default_evidence.py C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_043344_dsd_001_dw_identity_nosim C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_050540_dsd_002_sig0.05 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_053716_dsd_003_sig0.1 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_060916_dsd_004_sig0.15 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_064135_dsd_005_sig0.2 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_071240_dsd_006_sig0.25 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_074347_dsd_007_sig0.35 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_081439_dsd_008_sig0.5 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_084541_dsd_009_sig0.75 C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs\2026-02-26_091645_dsd_010_sig1.0 --out C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\default_evidence_comparison.png --top-k 8 --xlim -10.0 20.0 --title default_sigma_dependence
+[returncode] 0
+[elapsed_sec] 2.413
+
+===== STDOUT =====
+[saved] C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\default_evidence_comparison.png
+[ranking] logZ_alpha (higher is better; additive constant cancels in differences)
+      -126.921  |  bryan_laplace     |  2026-02-26_064135_dsd_005_sig0.2 | Dw sim(s=0.2,mix=1.0)
+      -127.447  |  bryan_laplace     |  2026-02-26_081439_dsd_008_sig0.5 | Dw sim(s=0.5,mix=1.0)
+      -127.859  |  bryan_laplace     |  2026-02-26_074347_dsd_007_sig0.35 | Dw sim(s=0.35,mix=1.0)
+      -128.415  |  bryan_laplace     |  2026-02-26_043344_dsd_001_dw_identity_nosim | Dw
+      -128.651  |  bryan_laplace     |  2026-02-26_071240_dsd_006_sig0.25 | Dw sim(s=0.25,mix=1.0)
+      -128.799  |  bryan_laplace     |  2026-02-26_053716_dsd_003_sig0.1 | Dw sim(s=0.1,mix=1.0)
+       -128.86  |  bryan_laplace     |  2026-02-26_091645_dsd_010_sig1.0 | Dw sim(s=1.0,mix=1.0)
+      -128.873  |  bryan_laplace     |  2026-02-26_060916_dsd_004_sig0.15 | Dw sim(s=0.15,mix=1.0)
+      -128.953  |  bryan_laplace     |  2026-02-26_050540_dsd_002_sig0.05 | Dw sim(s=0.05,mix=1.0)
+      -129.175  |  bryan_laplace     |  2026-02-26_084541_dsd_009_sig0.75 | Dw sim(s=0.75,mix=1.0)
+
+===== STDERR =====

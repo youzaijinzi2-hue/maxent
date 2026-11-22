@@ -1,0 +1,55 @@
+base_config: configs/default.yaml
+
+overrides:
+  alpha_posterior:
+    method: bryan_laplace
+  sampler:
+    n_step: 4000
+
+set:
+  logging.level: INFO
+  default_model.renormalize: true
+  default_model.floor: 1e-12
+  default_model.similar_to_Dw.enabled: false
+
+run:
+  name: default_gaussian_sweep
+  output_root: runs/pipelines/default_gaussian_sweep
+  tag_prefix: dgs
+  parallel_workers: 2
+  resume_mode: none
+  auto_plot_evidence: true
+  plot_top_k: 5
+  plot_xlim: [-10, 20]
+
+# 1) Single Gaussian sweep (mu, sigma).
+matrix:
+  name_template: "g_mu{default_model.gaussian.mu}_sig{default_model.gaussian.sigma}"
+  set:
+    default_model.base: gaussian
+    default_model.gaussian.amp: 1.0
+  axes:
+    default_model.gaussian.mu: [-1.5, -0.5, 0.0, 0.5, 1.5]
+    default_model.gaussian.sigma: [0.8, 1.2, 2.0]
+
+# 2) Optional mixture examples.
+experiments:
+  - name: gm_two_peak_balanced
+    overrides:
+      default_model:
+        base: gaussian_mixture
+        gaussian_mixture:
+          components:
+            - {mu: -1.0, sigma: 1.0, weight: 0.5}
+            - {mu: 2.0,  sigma: 1.8, weight: 0.5}
+
+  - name: gm_two_peak_left_heavy
+    overrides:
+      default_model:
+        base: gaussian_mixture
+        gaussian_mixture:
+          components:
+            - {mu: -1.0, sigma: 1.0, weight: 0.7}
+            - {mu: 2.0,  sigma: 1.8, weight: 0.3}
+
+fail_fast: false

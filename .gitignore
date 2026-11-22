@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Data & outputs
+data/raw/
+data/interim/
+data/processed/
+outputs/
+runs/
+*.pt
+*.npy
+*.npz
+*.pkl
+
+# OS
+.DS_Store
+Thumbs.db

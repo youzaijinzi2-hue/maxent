@@ -1,0 +1,48 @@
+base_config: configs/default.yaml
+
+# Sweep for default-model dependence along smooth_sigma only.
+overrides:
+  sampler:
+    n_step: 12000
+    # Colab-safe diagnostics knobs:
+    # - disable periodic IAT/MCSE FFT check during sampling
+    # - keep final IAT on a bounded window
+    mcse_check_interval: 0
+    iat_final_window: 2000
+    iat_max_fft_bytes: 67108864
+  alpha_posterior:
+    method: bryan_laplace
+
+set:
+  logging.level: INFO
+  default_model.base: Dw
+  default_model.renormalize: true
+  default_model.floor: 1e-12
+  default_model.similar_to_Dw.enabled: true
+  default_model.similar_to_Dw.mix_smoothed: 1.0
+  default_model.similar_to_Dw.min_rel_l2: 0.0
+  default_model.similar_to_Dw.max_rel_l2: 1.0
+
+run:
+  name: default_sigma_dependence
+  output_root: runs_for_paper/pipelines/default_sigma_dependence
+  tag_prefix: dsd
+  parallel_workers: 1
+  resume_mode: none
+  auto_plot_evidence: true
+  plot_top_k: 8
+  plot_xlim: [-10, 20]
+
+# Baseline without similar_to_Dw deformation.
+experiments:
+  - name: dw_identity_nosim
+    set:
+      default_model.similar_to_Dw.enabled: false
+
+# smooth_sigma gradual sweep with fixed mix_smoothed.
+matrix:
+  name_template: "sig{default_model.similar_to_Dw.smooth_sigma}"
+  axes:
+    default_model.similar_to_Dw.smooth_sigma: [0.05, 0.10, 0.15, 0.20, 0.25, 0.35, 0.50, 0.75, 1.00]
+
+fail_fast: false

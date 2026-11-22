@@ -1,0 +1,203 @@
+{
+  "pipeline": "C:\\Users\\knkyy\\MaxEntropyMethod\\configs\\pipeline_default_sigma_dependence.yaml",
+  "base_config": "C:\\Users\\knkyy\\MaxEntropyMethod\\configs\\default.yaml",
+  "output_root": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence",
+  "dry_run": false,
+  "fail_fast": false,
+  "resume_mode": "none",
+  "parallel_workers": 1,
+  "runner_script": "C:\\Users\\knkyy\\MaxEntropyMethod\\scripts\\run_maxent.py",
+  "plot_script": "C:\\Users\\knkyy\\MaxEntropyMethod\\scripts\\plot_default_evidence.py",
+  "auto_plot_evidence": true,
+  "plot_output": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\default_evidence_comparison.png",
+  "python": "C:\\Users\\knkyy\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "total_trials_defined": 10,
+  "total_trials_executed": 10,
+  "success_count": 10,
+  "failed_count": 0,
+  "skipped_count": 0,
+  "planned_count": 0,
+  "plot_candidate_count": 10,
+  "rows": [
+    {
+      "index": 1,
+      "name": "dw_identity_nosim",
+      "source": "experiments",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1915.745,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\001_dw_identity_nosim.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_043344_dsd_001_dw_identity_nosim",
+      "logZ_alpha": -128.4151573555606,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\001_dw_identity_nosim.log",
+      "set_values": {
+        "default_model.similar_to_Dw.enabled": false
+      },
+      "overrides": {}
+    },
+    {
+      "index": 2,
+      "name": "sig0.05",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1892.77,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\002_sig0.05.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_050540_dsd_002_sig0.05",
+      "logZ_alpha": -128.95319083805137,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\002_sig0.05.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.05
+      },
+      "overrides": {}
+    },
+    {
+      "index": 3,
+      "name": "sig0.1",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1923.469,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\003_sig0.1.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_053716_dsd_003_sig0.1",
+      "logZ_alpha": -128.79902649055845,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\003_sig0.1.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.1
+      },
+      "overrides": {}
+    },
+    {
+      "index": 4,
+      "name": "sig0.15",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1936.882,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\004_sig0.15.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_060916_dsd_004_sig0.15",
+      "logZ_alpha": -128.87309921554012,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\004_sig0.15.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.15
+      },
+      "overrides": {}
+    },
+    {
+      "index": 5,
+      "name": "sig0.2",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1867.514,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\005_sig0.2.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_064135_dsd_005_sig0.2",
+      "logZ_alpha": -126.92128337077023,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\005_sig0.2.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.2
+      },
+      "overrides": {}
+    },
+    {
+      "index": 6,
+      "name": "sig0.25",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1866.981,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\006_sig0.25.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_071240_dsd_006_sig0.25",
+      "logZ_alpha": -128.65061490017456,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\006_sig0.25.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.25
+      },
+      "overrides": {}
+    },
+    {
+      "index": 7,
+      "name": "sig0.35",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1851.285,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\007_sig0.35.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_074347_dsd_007_sig0.35",
+      "logZ_alpha": -127.8587807566642,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\007_sig0.35.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.35
+      },
+      "overrides": {}
+    },
+    {
+      "index": 8,
+      "name": "sig0.5",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1862.002,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\008_sig0.5.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_081439_dsd_008_sig0.5",
+      "logZ_alpha": -127.44674323208162,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\008_sig0.5.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.5
+      },
+      "overrides": {}
+    },
+    {
+      "index": 9,
+      "name": "sig0.75",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1864.558,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\009_sig0.75.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_084541_dsd_009_sig0.75",
+      "logZ_alpha": -129.17473863330795,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\009_sig0.75.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 0.75
+      },
+      "overrides": {}
+    },
+    {
+      "index": 10,
+      "name": "sig1.0",
+      "source": "matrix",
+      "status": "ok",
+      "note": "executed",
+      "returncode": 0,
+      "duration_sec": 1869.795,
+      "config_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\generated_configs\\010_sig1.0.yaml",
+      "run_dir": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\runs\\2026-02-26_091645_dsd_010_sig1.0",
+      "logZ_alpha": -128.86019362197268,
+      "alpha_weight_method": "bryan_laplace",
+      "log_path": "C:\\Users\\knkyy\\MaxEntropyMethod\\runs_for_paper\\pipelines\\default_sigma_dependence\\logs\\010_sig1.0.log",
+      "set_values": {
+        "default_model.similar_to_Dw.smooth_sigma": 1.0
+      },
+      "overrides": {}
+    }
+  ]
+}

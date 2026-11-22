@@ -1,0 +1,210 @@
+*** a/sampler.py
+--- b/sampler.py
+***************
+*** 1,20 ****
+--- 1,20 ----
+  (省略)
+***************
+*** 200,270 ****
+          # ループ外でカウンタを初期化
+          # keys は 'pca','ws','cg' の３種類
+          trials = {'pca': 0, 'ws': 0, 'cg': 0}
+          accepts = {'pca': 0, 'ws': 0, 'cg': 0}
+-         
+-        # --- Move diagnostics: ΔH and Δn statistics (proposal/accepted) ---
+-         diag = {
+-             'pca': {'sum_abs_dH_prop': 0.0, 'sum_abs_dH_acc': 0.0,
+-                     'sum_dn_l1_prop': 0.0, 'sum_dn_l1_acc': 0.0,
+-                     'sum_dn_l2_prop': 0.0, 'sum_dn_l2_acc': 0.0,
+-                     'buf_abs_dH_acc': []},
+-             'ws':  {'sum_abs_dH_prop': 0.0, 'sum_abs_dH_acc': 0.0,
+-                     'sum_dn_l1_prop': 0.0, 'sum_dn_l1_acc': 0.0,
+-                     'sum_dn_l2_prop': 0.0, 'sum_dn_l2_acc': 0.0,
+-                     'buf_abs_dH_acc': []},
+-             'cg':  {'sum_abs_dH_prop': 0.0, 'sum_abs_dH_acc': 0.0,
+-                     'sum_dn_l1_prop': 0.0, 'sum_dn_l1_acc': 0.0,
+-                     'sum_dn_l2_prop': 0.0, 'sum_dn_l2_acc': 0.0,
+-                     'buf_abs_dH_acc': []},
+-         }
+-         MAX_STORE = 5000
+- 
+-         def _append_buffer(buf: List[torch.Tensor], vals: torch.Tensor):
+-             # vals: (k,) CPU or GPU OK. We store CPU float64 for quantiles.
+-             if vals.numel() == 0:
+-                 return
+-             buf.append(vals.detach().to('cpu', dtype=torch.float64))
+-             # cap memory (rough but effective)
+-             if len(buf) > 50:
+-                 merged = torch.cat(buf, dim=0)
+-                 if merged.numel() > MAX_STORE:
+-                     # keep the most recent MAX_STORE samples
+-                     merged = merged[-MAX_STORE:]
+-                 buf.clear()
+-                 buf.append(merged)
+  
+          # --- Move diagnostics accumulator (keeps loop readable) ---
+          move_diag = MoveDiagAccumulator(max_store=5000)
+          # 各ムーブごとにカウンタを用意
+***************
+*** 520,590 ****
+              dn_l2_pca = _dn_l2(prop_n_pca)
+              dn_l2_ws  = _dn_l2(prop_n_ws)
+              dn_l2_cg  = _dn_l2(prop_n_cg)
+  
+              # accumulate proposal-side stats (only for replicas where that move was selected)
+-             if cond_pca.any():
+-                 diag['pca']['sum_abs_dH_prop'] += torch.sum(torch.abs(dH_pca[cond_pca])).item()
+-                 diag['pca']['sum_dn_l1_prop']  += torch.sum(dn_l1_pca[cond_pca]).item()
+-                 diag['pca']['sum_dn_l2_prop']  += torch.sum(dn_l2_pca[cond_pca]).item()
+-             if cond_ws.any():
+-                 diag['ws']['sum_abs_dH_prop'] += torch.sum(torch.abs(dH_ws[cond_ws])).item()
+-                 diag['ws']['sum_dn_l1_prop']  += torch.sum(dn_l1_ws[cond_ws]).item()
+-                 diag['ws']['sum_dn_l2_prop']  += torch.sum(dn_l2_ws[cond_ws]).item()
+-             if cond_cg.any():
+-                 diag['cg']['sum_abs_dH_prop'] += torch.sum(torch.abs(dH_cg[cond_cg])).item()
+-                 diag['cg']['sum_dn_l1_prop']  += torch.sum(dn_l1_cg[cond_cg]).item()
+-                 diag['cg']['sum_dn_l2_prop']  += torch.sum(dn_l2_cg[cond_cg]).item()
++             # NOTE: accumulator takes full (R,) tensors + mask, and internally slices/aggregates.
++             move_diag.add_proposal("pca", dH_pca, dn_l1_pca, dn_l2_pca, cond_pca)
++             move_diag.add_proposal("ws",  dH_ws,  dn_l1_ws,  dn_l2_ws,  cond_ws)
++             move_diag.add_proposal("cg",  dH_cg,  dn_l1_cg,  dn_l2_cg,  cond_cg)
+  
+              # 0 以上を保証
+              self.proposal_n = torch.clamp(self.proposal_n, min=1e-12)
+  
+              # 受容条件が満たされたときは提案分布を受容する
+              xi = torch.rand(R, device=self.device, dtype=torch.float64)
+              accept_mask = xi < torch.exp(log_lr)  # shape(R,)
+  
+              # ---- diagnostics: accepted-side stats (move-specific) ----
+              acc_pca = cond_pca & accept_mask
+              acc_ws  = cond_ws  & accept_mask
+              acc_cg  = cond_cg  & accept_mask
+  
+-             if acc_pca.any():
+-                 diag['pca']['sum_abs_dH_acc'] += torch.sum(torch.abs(dH_pca[acc_pca])).item()
+-                 diag['pca']['sum_dn_l1_acc']  += torch.sum(dn_l1_pca[acc_pca]).item()
+-                 diag['pca']['sum_dn_l2_acc']  += torch.sum(dn_l2_pca[acc_pca]).item()
+-                 _append_buffer(diag['pca']['buf_abs_dH_acc'], torch.abs(dH_pca[acc_pca]))
+-             if acc_ws.any():
+-                 diag['ws']['sum_abs_dH_acc'] += torch.sum(torch.abs(dH_ws[acc_ws])).item()
+-                 diag['ws']['sum_dn_l1_acc']  += torch.sum(dn_l1_ws[acc_ws]).item()
+-                 diag['ws']['sum_dn_l2_acc']  += torch.sum(dn_l2_ws[acc_ws]).item()
+-                 _append_buffer(diag['ws']['buf_abs_dH_acc'], torch.abs(dH_ws[acc_ws]))
+-             if acc_cg.any():
+-                 diag['cg']['sum_abs_dH_acc'] += torch.sum(torch.abs(dH_cg[acc_cg])).item()
+-                 diag['cg']['sum_dn_l1_acc']  += torch.sum(dn_l1_cg[acc_cg]).item()
+-                 diag['cg']['sum_dn_l2_acc']  += torch.sum(dn_l2_cg[acc_cg]).item()
+-                 _append_buffer(diag['cg']['buf_abs_dH_acc'], torch.abs(dH_cg[acc_cg]))
++             move_diag.add_accept("pca", dH_pca, dn_l1_pca, dn_l2_pca, acc_pca)
++             move_diag.add_accept("ws",  dH_ws,  dn_l1_ws,  dn_l2_ws,  acc_ws)
++             move_diag.add_accept("cg",  dH_cg,  dn_l1_cg,  dn_l2_cg,  acc_cg)
+  
+              self.x_current = torch.where(accept_mask.unsqueeze(1), self.proposal_x, self.x_current)
+              self.n_current = torch.where(accept_mask.unsqueeze(1), self.proposal_n, self.n_current)
+              self.H_current = torch.where(accept_mask, self.proposal_H, self.H_current)
+  
+              # 試行回数を加算（レプリカごとに１試行とみなす）
+              trials['pca'] += cond_pca.sum().item()
+              trials['ws']  += cond_ws.sum().item()
+              trials['cg']  += cond_cg.sum().item()
+              # 受容回数を加算
+              accepts['pca'] += (cond_pca & accept_mask).sum().item()
+              accepts['ws']  += (cond_ws  & accept_mask).sum().item()
+              accepts['cg']  += (cond_cg  & accept_mask).sum().item()
+***************
+*** 780,860 ****
+          print(f"[pca] acceptance rate = {accepts['pca']/trials['pca']:.3f} ({accepts['pca']}/{trials['pca']})")
+          print(f"[ws] acceptance rate = {accepts['ws']/trials['ws']:.3f} ({accepts['ws']}/{trials['ws']})")
+          print(f"[cg] acceptance rate = {accepts['cg']/trials['cg']:.3f} ({accepts['cg']}/{trials['cg']})")
+          
+          # ---- print diagnostics summary ----
+-         def _safe_div(a, b):
+-             return a / b if b > 0 else float('nan')
+- 
+-         for move in ['pca','ws','cg']:
+-             n_prop = trials[move]
+-             n_acc  = accepts[move]
+-             mean_abs_dH_prop = _safe_div(diag[move]['sum_abs_dH_prop'], n_prop)
+-             mean_abs_dH_acc  = _safe_div(diag[move]['sum_abs_dH_acc'],  n_acc)
+-             mean_dn_l1_prop  = _safe_div(diag[move]['sum_dn_l1_prop'],  n_prop)
+-             mean_dn_l1_acc   = _safe_div(diag[move]['sum_dn_l1_acc'],   n_acc)
+-             mean_dn_l2_prop  = _safe_div(diag[move]['sum_dn_l2_prop'],  n_prop)
+-             mean_dn_l2_acc   = _safe_div(diag[move]['sum_dn_l2_acc'],   n_acc)
+- 
+-             # quantiles for |ΔH| among accepted moves (approx buffer)
+-             if len(diag[move]['buf_abs_dH_acc']) == 0:
+-                 q10 = q50 = q90 = float('nan')
+-             else:
+-                 buf = torch.cat(diag[move]['buf_abs_dH_acc'], dim=0)
+-                 if buf.numel() == 0:
+-                     q10 = q50 = q90 = float('nan')
+-                 else:
+-                     qs = torch.quantile(buf, torch.tensor([0.1, 0.5, 0.9], dtype=torch.float64))
+-                     q10, q50, q90 = (qs[0].item(), qs[1].item(), qs[2].item())
+- 
+-             print(
+-                 f"[{move}] |ΔH| mean(prop)={mean_abs_dH_prop:.3e}, mean(acc)={mean_abs_dH_acc:.3e}, "
+-                 f"q10/q50/q90(acc)={q10:.3e}/{q50:.3e}/{q90:.3e} ; "
+-                 f"Δn L1 mean(prop)={mean_dn_l1_prop:.3e}, mean(acc)={mean_dn_l1_acc:.3e} ; "
+-                 f"Δn L2 mean(prop)={mean_dn_l2_prop:.3e}, mean(acc)={mean_dn_l2_acc:.3e}"
+-             )
++         move_diag_summary = move_diag.summarize(trials=trials, accepts=accepts)
++         for move in ['pca','ws','cg']:
++             md = move_diag_summary.get(move, {})
++             print(
++                 f"[{move}] |ΔH| mean(prop)={md.get('mean_abs_dH_prop', float('nan')):.3e}, "
++                 f"mean(acc)={md.get('mean_abs_dH_acc', float('nan')):.3e}, "
++                 f"q10/q50/q90(acc)={md.get('q10_abs_dH_acc', float('nan')):.3e}/"
++                 f"{md.get('q50_abs_dH_acc', float('nan')):.3e}/"
++                 f"{md.get('q90_abs_dH_acc', float('nan')):.3e} ; "
++                 f"Δn L1 mean(prop)={md.get('mean_dn_l1_prop', float('nan')):.3e}, "
++                 f"mean(acc)={md.get('mean_dn_l1_acc', float('nan')):.3e} ; "
++                 f"Δn L2 mean(prop)={md.get('mean_dn_l2_prop', float('nan')):.3e}, "
++                 f"mean(acc)={md.get('mean_dn_l2_acc', float('nan')):.3e}"
++             )
+***************
+*** 900,980 ****
+          diagnostics = {}
+  
+          # acceptance rate
+          for move in ['pca','ws','cg']:
+              rate = accepts[move] / trials[move] if trials[move] > 0 else float('nan')
+              diagnostics[f"{move}_accept_rate"] = float(rate)
+  
+          # move diagnostics summary (あなたの計算を再利用)
+-         diagnostics["move_diag"] = {}
+-         for move in ['pca','ws','cg']:
+-             n_prop = trials[move]
+-             n_acc  = accepts[move]
+-             mean_abs_dH_prop = _safe_div(diag[move]['sum_abs_dH_prop'], n_prop)
+-             mean_abs_dH_acc  = _safe_div(diag[move]['sum_abs_dH_acc'],  n_acc)
+-             mean_dn_l1_prop  = _safe_div(diag[move]['sum_dn_l1_prop'],  n_prop)
+-             mean_dn_l1_acc   = _safe_div(diag[move]['sum_dn_l1_acc'],   n_acc)
+-             mean_dn_l2_prop  = _safe_div(diag[move]['sum_dn_l2_prop'],  n_prop)
+-             mean_dn_l2_acc   = _safe_div(diag[move]['sum_dn_l2_acc'],   n_acc)
+- 
+-             if len(diag[move]['buf_abs_dH_acc']) > 0:
+-                 buf = torch.cat(diag[move]['buf_abs_dH_acc'], dim=0)
+-                 if buf.numel() > 0:
+-                     qs = torch.quantile(buf, torch.tensor([0.1, 0.5, 0.9], dtype=torch.float64))
+-                     q10, q50, q90 = (qs[0].item(), qs[1].item(), qs[2].item())
+-                 else:
+-                     q10 = q50 = q90 = float('nan')
+-             else:
+-                 q10 = q50 = q90 = float('nan')
+- 
+-             diagnostics["move_diag"][move] = dict(
+-                 mean_abs_dH_prop=float(mean_abs_dH_prop),
+-                 mean_abs_dH_acc=float(mean_abs_dH_acc),
+-                 q10_abs_dH_acc=float(q10),
+-                 q50_abs_dH_acc=float(q50),
+-                 q90_abs_dH_acc=float(q90),
+-                 mean_dn_l1_prop=float(mean_dn_l1_prop),
+-                 mean_dn_l1_acc=float(mean_dn_l1_acc),
+-                 mean_dn_l2_prop=float(mean_dn_l2_prop),
+-                 mean_dn_l2_acc=float(mean_dn_l2_acc),
+-                 n_prop=int(n_prop),
+-                 n_acc=int(n_acc),
+-             )
++         diagnostics["move_diag"] = move_diag.summarize(trials=trials, accepts=accepts)

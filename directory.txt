@@ -1,0 +1,279 @@
+tree /f /a > directory.txtで作れる。
+
+C:.
+|   .gitattributes
+|   .gitignore
+|   directory.txt
+|   init_mazent_repo.bat
+|   LICENSE
+|   main.py
+|   pyproject.toml
+|   README.md
+|   
++---.pytest_cache
+|   |   .gitignore
+|   |   CACHEDIR.TAG
+|   |   README.md
+|   |   
+|   \---v
+|       \---cache
+|               lastfailed
+|               nodeids
+|               stepwise
+|               
++---configs
+|   |   default.yaml
+|   |   
+|   +---dataset
+|   |       xas_sample.yaml
+|   |       
+|   +---model
+|   |       maxent.yaml
+|   |       
+|   \---run
+|           debug.yaml
+|           
++---data
+|   +---interim
+|   |       .gitkeep
+|   |       
+|   +---processed
+|   |       .gitkeep
+|   |       
+|   \---raw
+|           .gitkeep
+|           k2cr2o7_rt_003.xdi
+|           
++---docs
+|       design.md
+|       theory.md
+|       
++---examples
+|       00_quickstart.ipynb
+|       01_xas_to_green_and_maxent.py
+|       
++---runs
+|   |   .gitkeep
+|   |   
+|   +---2025-12-28_005208_debug
+|   |   |   config_resolved.yaml
+|   |   |   
+|   |   +---artifacts
+|   |   \---logs
+|   +---2025-12-28_005246_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   \---logs
+|   +---2025-12-28_005736_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_010844_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_011834_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_013733_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   \---logs
+|   +---2025-12-28_022959_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   \---logs
+|   +---2025-12-28_023324_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   \---logs
+|   +---2025-12-28_023841_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_025058_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_031706_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_032739_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_033828_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   +---2025-12-28_040614_debug
+|   |   |   config_resolved.yaml
+|   |   |   input_manifest.json
+|   |   |   run_meta.json
+|   |   |   
+|   |   +---artifacts
+|   |   |       inputs.npz
+|   |   |       result.npz
+|   |   |       
+|   |   \---logs
+|   \---2025-12-28_042919_debug
+|       |   config_resolved.yaml
+|       |   input_manifest.json
+|       |   run_meta.json
+|       |   
+|       +---artifacts
+|       |       inputs.npz
+|       |       result.npz
+|       |       
+|       \---logs
++---scripts
+|       prepare_from_xas.py
+|       run_maxent.py
+|       
++---src
+|   +---maxent
+|   |   |   config.py
+|   |   |   plotting.py
+|   |   |   reconstruct.py
+|   |   |   types.py
+|   |   |   __init__.py
+|   |   |   
+|   |   +---diagnostics
+|   |   |       ess.py
+|   |   |       rhat.py
+|   |   |       __init__.py
+|   |   |       
+|   |   +---io
+|   |   |   |   xas.py
+|   |   |   |   __init__.py
+|   |   |   |   
+|   |   |   \---__pycache__
+|   |   |           xas.cpython-311.pyc
+|   |   |           __init__.cpython-311.pyc
+|   |   |           
+|   |   +---kernels
+|   |   |       fermion_tau.py
+|   |   |       matsubara.py
+|   |   |       __init__.py
+|   |   |       
+|   |   +---mcmc
+|   |   |   |   replica_exchange.py
+|   |   |   |   sampler.py
+|   |   |   |   state.py
+|   |   |   |   __init__.py
+|   |   |   |   
+|   |   |   +---moves
+|   |   |   |       mala.py
+|   |   |   |       pca.py
+|   |   |   |       weight_sharing.py
+|   |   |   |       __init__.py
+|   |   |   |       
+|   |   |   \---__pycache__
+|   |   |           sampler.cpython-311.pyc
+|   |   |           __init__.cpython-311.pyc
+|   |   |           
+|   |   +---operators
+|   |   |   |   forward.py
+|   |   |   |   mapping.py
+|   |   |   |   __init__.py
+|   |   |   |   
+|   |   |   \---__pycache__
+|   |   |           forward.cpython-311.pyc
+|   |   |           __init__.cpython-311.pyc
+|   |   |           
+|   |   +---preprocess
+|   |   |   |   xas_preprocess.py
+|   |   |   |   __init__.py
+|   |   |   |   
+|   |   |   \---__pycache__
+|   |   |           xas_preprocess.cpython-311.pyc
+|   |   |           __init__.cpython-311.pyc
+|   |   |           
+|   |   \---__pycache__
+|   |           __init__.cpython-311.pyc
+|   |           
+|   \---maxent.egg-info
+|           dependency_links.txt
+|           PKG-INFO
+|           SOURCES.txt
+|           top_level.txt
+|           
+\---tests
+    |   test_dist_alpha.py
+    |   test_forward_consistency.py
+    |   test_green_forward_consistency.py
+    |   test_mapping_jacobian.py
+    |   test_mcmc_invariants.py
+    |   test_operators_h_normalization.py
+    |   test_xas_loader.py
+    |   
+    \---__pycache__
+            test_forward_consistency.cpython-311-pytest-8.3.5.pyc
+            test_green_forward_consistency.cpython-311-pytest-8.3.5.pyc
+            test_mapping_jacobian.cpython-311-pytest-8.3.5.pyc
+            test_mcmc_invariants.cpython-311-pytest-8.3.5.pyc
+            test_operators_h_normalization.cpython-311-pytest-8.3.5.pyc
+            test_xas_loader.cpython-311-pytest-8.3.5.pyc
+            

@@ -1,0 +1,99 @@
+seed: 0
+dataset:
+  file_name: data/raw/Se_Se0_rt_02.xdi
+prepare:
+  w_lo: -20
+  w_hi: 40
+  beta: 50.0
+  Nn: 4096
+  sigma_iw: 0.05
+  sigma_iw_guard:
+    enabled: true
+    max_rel: 0.05
+    cap_quantile: 0.9
+    amp_floor_rel: 0.001
+    sigma_min: 1e-12
+  add_iw_noise: true
+  iw_noise_scale: 1.0
+  use_tau_covariance: true
+  tau_cov_jitter: 1e-12
+  snr: 20.0
+  calc_sigma_tau: true
+  sigma_tau: 0.1
+  noise_peak:
+    use_noise_peak: false
+    mu: 0.0
+    sigma: 0.2
+    amp: 0.2
+    eps: 5e-3
+  renorm: false
+grid:
+  N: 300
+  N_tau: 256
+default_model:
+  base: Dw
+  renormalize: true
+  floor: 1e-12
+  similar_to_Dw:
+    enabled: true
+    smooth_sigma: 0.35
+    mix_smoothed: 1.0
+    min_rel_l2: 0.0
+    max_rel_l2: 1.0
+alphas:
+  kind: logspace
+  start_exp: -3
+  end_exp: 3
+  num: 20
+alpha_posterior:
+  method: bryan_laplace
+  prior_bryan: jeffreys
+  prior_ti: jeffreys
+  bryan_main_term: map
+  reference_spectrum: map_local_mc
+  map_local_samples: 64
+  map_local_logp_window: 5.0
+  map_local_temperature: 1.0
+  map_local_seed: 0
+output:
+  root: C:\Users\knkyy\MaxEntropyMethod\runs_for_paper\pipelines\default_sigma_dependence\runs
+  tag: dsd_007_sig0.35
+  save_float: float64
+sampler:
+  n_step: 12000
+  burnin_ratio: 0.3
+  hot_start_ratio: 0.4
+  adapt_end_ratio: 0.6
+  swap_freq: 1
+  target_accept_pca: 0.4
+  target_accept_ws: 0.5
+  target_accept_cg: 0.57
+  compile: false
+  compile_backend: eager
+  mcse_check_interval: 0
+  iat_final_window: 2000
+  iat_max_fft_bytes: 67108864
+diagnostics:
+  do_iw: true
+  do_forward_self_test: true
+  rhat_split_segments: 4
+  mcmc_plot:
+    enabled: true
+    out: mcmc_convergence.png
+    rhat_threshold: 1.05
+    ess_min_per_chain: 50
+    max_replicas: 12
+    dpi: 180
+plotting:
+  roi:
+  - -5
+  - 5
+  peak_pos_samples: 5000
+  peak_pos_seed: 0
+  xlim:
+  - -10
+  - 20
+  peak_bins: 25
+  normalize_mode: max
+logging:
+  level: INFO

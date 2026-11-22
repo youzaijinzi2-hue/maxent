@@ -1,0 +1,55 @@
+base_config: configs/default.yaml
+
+# Optional global overrides applied to every trial (nested merge).
+overrides:
+  sampler:
+    n_step: 12000
+  alpha_posterior:
+    method: bryan_laplace
+
+# Optional global dotted-key setter applied to every trial.
+set:
+  logging.level: INFO
+
+run:
+  name: default_model_sweep
+  output_root: runs/pipelines/default_model_sweep
+  tag_prefix: dms
+  parallel_workers: 1
+  resume_mode: none
+  auto_plot_evidence: true
+  plot_top_k: 5
+  plot_xlim: [-10, 20]
+  # python: C:/Users/knkyy/AppData/Local/Programs/Python/Python311/python.exe
+  # runner_script: scripts/run_maxent.py
+  # runner_args: []
+
+# Explicit experiments (good for non-grid custom cases).
+experiments:
+  - name: dw_sim_mix0.30_sig0.35
+    set:
+      default_model.base: Dw
+      default_model.similar_to_Dw.enabled: true
+      default_model.similar_to_Dw.mix_smoothed: 0.30
+      default_model.similar_to_Dw.smooth_sigma: 0.35
+
+  - name: dw_sim_mix0.50_sig0.35
+    set:
+      default_model.base: Dw
+      default_model.similar_to_Dw.enabled: true
+      default_model.similar_to_Dw.mix_smoothed: 0.50
+      default_model.similar_to_Dw.smooth_sigma: 0.35
+
+# Cartesian sweep (axes product).
+# name_template placeholders use dotted-key names.
+matrix:
+  name_template: "mix{default_model.similar_to_Dw.mix_smoothed}_sig{default_model.similar_to_Dw.smooth_sigma}"
+  set:
+    default_model.base: Dw
+    default_model.similar_to_Dw.enabled: true
+  axes:
+    default_model.similar_to_Dw.mix_smoothed: [0.20, 0.35, 0.50, 0.65]
+    default_model.similar_to_Dw.smooth_sigma: [0.20, 0.35]
+
+# If true, stop the pipeline at first failed run.
+fail_fast: false

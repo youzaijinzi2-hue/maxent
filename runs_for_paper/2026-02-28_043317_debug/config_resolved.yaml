@@ -1,0 +1,123 @@
+seed: 0
+dataset:
+  file_name: data/raw/Se_Se0_rt_02.xdi
+prepare:
+  w_lo: -20
+  w_hi: 40
+  beta: 50.0
+  Nn: 4096
+  sigma_iw: 0.05
+  sigma_iw_guard:
+    enabled: true
+    max_rel: 0.05
+    cap_quantile: 0.9
+    amp_floor_rel: 0.001
+    sigma_min: 1e-12
+  add_iw_noise: true
+  iw_noise_scale: 1.0
+  use_tau_covariance: true
+  tau_cov_jitter: 1e-12
+  snr: 20.0
+  calc_sigma_tau: true
+  sigma_tau: 0.1
+  noise_peak:
+    use_noise_peak: false
+    mu: 0.0
+    sigma: 0.2
+    amp: 0.2
+    eps: 5e-3
+  renorm: false
+grid:
+  N: 150
+  N_tau: 256
+default_model:
+  base: Dw
+  renormalize: true
+  floor: 1e-12
+  similar_to_Dw:
+    enabled: false
+    smooth_sigma: 0.35
+    mix_smoothed: 0.5
+    min_rel_l2: 0.02
+    max_rel_l2: 0.15
+alphas:
+  kind: logspace
+  start_exp: -3
+  end_exp: 1
+  num: 10
+alpha_posterior:
+  method: bryan_laplace
+  prior_bryan: jeffreys
+  prior_ti: jeffreys
+  bryan_main_term: map
+  reference_spectrum: map_local_mc
+  map_local_samples: 64
+  map_local_logp_window: 5.0
+  map_local_temperature: 1.0
+  map_local_seed: 0
+output:
+  root: runs
+  tag: debug
+  save_float: float64
+sampler:
+  mode: mixed
+  n_step: 2000
+  burnin_ratio: 0.3
+  hot_start_ratio: 0.5
+  adapt_end_ratio: 1.0
+  adapt_hot_interval: 1
+  adapt_late_interval: 100
+  step_size_mh: 0.05
+  step_size_pca: 0.05
+  step_size_ws: 0.05
+  step_size_cg: 0.05
+  scale_adapt_t0: 10.0
+  scale_adapt_gamma: 0.05
+  scale_adapt_kappa: 0.75
+  scale_min: 1e-3
+  scale_max: 1e1
+  accept_ema_kappa: 0.8
+  prob_adapt_kappa: 0.9
+  prob_adapt_metric: esjd_per_sec
+  prob_min: 0.1
+  prob_utility_floor: 1e-12
+  prob_min_trials_per_move: 100
+  prob_esjd_whitened: true
+  prob_whiten_jitter: 1e-6
+  prob_whiten_shrinkage: 0.05
+  prob_whiten_weight_mode: count
+  prob_swap_reward_weight: 0.15
+  prob_swap_warmup_updates: 10
+  cg_cov_blend: 0.2
+  cg_cov_jitter: 1e-6
+  swap_freq: 1
+  target_accept_pca: 0.4
+  target_accept_ws: 0.5
+  target_accept_cg: 0.57
+  compile: false
+  compile_backend: eager
+diagnostics:
+  do_iw: true
+  do_forward_self_test: true
+  rhat_split_segments: 4
+  rhat_exclude_edge_bins: 1
+  mcmc_plot:
+    enabled: true
+    out: mcmc_convergence.png
+    rhat_threshold: 1.05
+    ess_min_per_chain: 50
+    max_replicas: 12
+    dpi: 180
+plotting:
+  roi:
+  - -5
+  - 5
+  peak_pos_samples: 5000
+  peak_pos_seed: 0
+  xlim:
+  - -10
+  - 20
+  peak_bins: 25
+  normalize_mode: max
+logging:
+  level: INFO

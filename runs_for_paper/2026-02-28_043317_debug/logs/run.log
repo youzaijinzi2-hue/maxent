@@ -1,0 +1,35 @@
+2026-02-28 04:33:17.795 INFO [log] logger initialized: level=INFO file=runs\2026-02-28_043317_debug\logs\run.log
+2026-02-28 04:33:20.902 INFO [meta] git sha saved: 90327cdb34b7c9491b53fa90b83f7810465655fd
+2026-02-28 04:33:21.672 INFO [tau-noise] using full tau covariance for likelihood: shape=(256, 256)
+2026-02-28 04:33:21.676 INFO [iw-noise] observation path: iω-consistent, info={"enabled": true, "iw_noise_scale": 1.0, "sigma_iw_pos_min": 0.000881712363766308, "sigma_iw_pos_med": 0.000881712363766308, "sigma_iw_pos_max": 0.000881712363766308}
+2026-02-28 04:33:21.761 INFO [default] model config: {"base": "dw", "similar_to_Dw": {"enabled": false}, "add_gaussian_peaks": false, "floor": 1e-12, "renormalize": true, "integral_target": 1.0, "integral_before": 1.0, "integral_after": 1.0}
+2026-02-28 04:35:22.291 INFO [default-evidence] logZ_alpha(rel)=-131.9318147263405 method=bryan_laplace
+2026-02-28 04:35:22.291 INFO [default-evidence] logZ_alpha_bryan(rel)=-131.9318147263405
+2026-02-28 04:35:22.291 INFO [default-evidence] logZ_alpha_ti(rel)=2.2166788592981668
+2026-02-28 04:35:22.361 INFO [peak] peak_pos_roi computed: M=5000 ROI=(-5, 5)
+2026-02-28 04:35:22.365 INFO [peak] ω_peak q16/q50/q84 = -0.167657 / 0.919948 / 0.991773
+2026-02-28 04:35:22.375 INFO [peak] peak_pos_thin computed: shape=(10, 1401) ROI=(-5, 5)
+2026-02-28 04:35:22.377 INFO [tau] best-fit c_tau = 1.00426
+2026-02-28 04:35:22.380 INFO [tau-raw]    chi2/Nt = 1.02657  z_rms=1.0132  z_mean=0.0350141
+2026-02-28 04:35:22.380 INFO [tau-scaled] chi2/Nt = 1.02483  z_rms=1.01234  z_mean=0.0167823
+2026-02-28 04:35:22.381 INFO [tau-whiten-scaled] chi2/Nt = 1.02483
+2026-02-28 04:35:22.381 INFO [tau-whiten-scaled] z_rms   = 1.01234  (sqrt(chi2/Nt))
+2026-02-28 04:35:22.381 INFO [tau-whiten-scaled] z mean/std (real) = 0.0167823 / 1.0122
+2026-02-28 04:35:22.382 INFO [tau-core-scaled] chi2/Nt = 0.936523  N=206
+2026-02-28 04:35:22.382 INFO [tau-core-scaled] z_rms   = 0.967741
+2026-02-28 04:35:22.383 INFO [tau-core-scaled] z mean/std (real) = 0.0385336 / 0.966974
+2026-02-28 04:35:22.383 INFO [metric-core] abs, rel, white = 0.022168927533660326 0.4176100060927705 13.889697439604106 N=206
+2026-02-28 04:35:22.383 INFO [diag] iω diagnostics: ENABLED (reference/debug)
+2026-02-28 04:35:22.396 INFO [iw] best-fit c = 1.02489
+2026-02-28 04:35:22.397 INFO [iw-whiten] chi2/Nw = 1.7713
+2026-02-28 04:35:22.399 INFO [iw-whiten] z_rms   = 120.459  (sqrt(chi2))
+2026-02-28 04:35:22.399 INFO [iw-whiten] z mean/std (real) = 0.227764 / 1.00018
+2026-02-28 04:35:22.400 INFO [iw-whiten] z mean/std (imag) = 2.60209e-18 / 0.84798
+2026-02-28 04:35:22.400 INFO [iw] ||G_iw_noisy||_2  = 1.39498
+2026-02-28 04:35:22.400 INFO [iw] ||G_iw_rec||_2    = 1.39093
+2026-02-28 04:35:22.401 INFO [metric-iw] sqrt(chi2) = 120.459
+2026-02-28 04:35:22.401 INFO [metric-iw] chi2/Nw    = 1.7713
+2026-02-28 04:35:22.449 INFO [forward-self] abs_l2=4.704074e-03 rel_l2=1.827573e-02
+2026-02-28 04:35:23.851 INFO [mcmc] convergence figure saved: C:\Users\knkyy\MaxEntropyMethod\runs\2026-02-28_043317_debug\mcmc_convergence.png
+2026-02-28 04:35:23.851 INFO [mcmc] summary: rhat_max=1.19415 ess_min_per_chain=566.368 total_ess=12279.1 mcse_max=0.087488
+2026-02-28 04:35:23.851 INFO [OK] run saved to: runs\2026-02-28_043317_debug
